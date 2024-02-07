@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"strconv"
 
 	"golang.org/x/oauth2/google"
 	"google.golang.org/api/option"
@@ -52,12 +53,45 @@ func main() {
 	var rang = "A4:H27"
 
 	// Convert sheet ID to sheet name.
-	response1, err := srv.Spreadsheets.Values.Get(spreadsheetId, rang).Do()
-	if err != nil || response1.HTTPStatusCode != 200 {
+	allSheets, err := srv.Spreadsheets.Values.Get(spreadsheetId, rang).Do()
+	if err != nil {
 		log.Fatal(err)
 		return
 	}
 
-	fmt.Println(response1)
+	size := len(allSheets.Values)
 
+	var result []any
+
+	for i := 0; i < size; i++ {
+		absence, _ := allSheets.Values[i][2].(string)
+		p1, _ := allSheets.Values[i][3].(string)
+		p2, _ := allSheets.Values[i][4].(string)
+		p3, _ := allSheets.Values[i][5].(string)
+		result = append(result, studentStatus(absence, p1, p2, p3))
+	}
+
+	fmt.Println(result)
+	res := studentStatus("50", "66", "88", "80")
+	fmt.Println(res)
+}
+
+func studentStatus(absence, p1, p2, p3 string) string {
+	absenceInt, _ := strconv.ParseFloat(absence, 64)
+	p1Int, _ := strconv.Atoi(p1)
+	p2Int, _ := strconv.Atoi(p2)
+	p3Int, _ := strconv.Atoi(p3)
+	absences := int((absenceInt / 60) * 100)
+	average := ((p1Int / 10) + (p2Int / 10) + (p3Int / 10)) / 3
+	if absences >= 25 {
+		return "Reprovado por Falta"
+	}
+
+	if average >= 7 {
+		return "Aprovado"
+	} else if average < 7 && average >= 5 {
+		return "Exame Final"
+	} else {
+		return "Reprovado por Nota"
+	}
 }
