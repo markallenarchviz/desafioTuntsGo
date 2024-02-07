@@ -15,7 +15,7 @@ func Config() *sheets.Service {
 	// create api context
 	ctx := context.Background()
 
-	jsonData, err := os.ReadFile("google.json")
+	jsonData, err := os.ReadFile("config/google.json")
 	if err != nil {
 		log.Fatalf("Error reading JSON file: %v", err)
 	}
