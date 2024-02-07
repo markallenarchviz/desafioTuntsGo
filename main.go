@@ -62,6 +62,7 @@ func main() {
 
 	var result [][]interface{}
 
+	//Loop over spreadsheet to add new values
 	for i := 0; i < size; i++ {
 		absence, _ := allSheets.Values[i][2].(string)
 		p1, _ := allSheets.Values[i][3].(string)
@@ -74,16 +75,19 @@ func main() {
 
 	range2 := "G4:H27"
 
+	//Creating rows data type
 	row := &sheets.ValueRange{
 		Values: result,
 	}
 
+	//Update the spreadsheet with new data
 	_, err = srv.Spreadsheets.Values.Update(spreadsheetId, range2, row).ValueInputOption("USER_ENTERED").Context(ctx).Do()
 	if err != nil {
 		log.Fatal(err)
 	}
 }
 
+// Calculating student grades
 func studentStatus(absence, p1, p2, p3 string) string {
 	absenceInt, _ := strconv.ParseFloat(absence, 64)
 	p1Int, _ := strconv.Atoi(p1)
@@ -104,6 +108,7 @@ func studentStatus(absence, p1, p2, p3 string) string {
 	}
 }
 
+// Verify if student is in finals
 func finalExame(res, p1, p2, p3 string) string {
 	p1Int, _ := strconv.ParseFloat(p1, 64)
 	p2Int, _ := strconv.ParseFloat(p2, 64)
