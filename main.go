@@ -68,7 +68,9 @@ func main() {
 		p1, _ := allSheets.Values[i][3].(string)
 		p2, _ := allSheets.Values[i][4].(string)
 		p3, _ := allSheets.Values[i][5].(string)
-		result = append(result, studentStatus(absence, p1, p2, p3))
+		res := studentStatus(absence, p1, p2, p3)
+		arr := []string{res, finalExame(res, p1, p2, p3)}
+		result = append(result, arr)
 	}
 
 	fmt.Println(result)
@@ -94,4 +96,18 @@ func studentStatus(absence, p1, p2, p3 string) string {
 	} else {
 		return "Reprovado por Nota"
 	}
+}
+
+func finalExame(res, p1, p2, p3 string) string {
+	p1Int, _ := strconv.ParseFloat(p1, 64)
+	p2Int, _ := strconv.ParseFloat(p2, 64)
+	p3Int, _ := strconv.ParseFloat(p3, 64)
+
+	average := int(((p1Int / 10) + (p2Int / 10) + (p3Int / 10)) / 3)
+
+	if res != "Exame Final" {
+		return "0"
+	}
+
+	return strconv.Itoa(((average + 5) / 2))
 }
