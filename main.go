@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"encoding/base64"
-	"fmt"
 	"io/ioutil"
 	"log"
 	"strconv"
@@ -61,7 +60,7 @@ func main() {
 
 	size := len(allSheets.Values)
 
-	var result []any
+	var result [][]interface{}
 
 	for i := 0; i < size; i++ {
 		absence, _ := allSheets.Values[i][2].(string)
@@ -69,13 +68,20 @@ func main() {
 		p2, _ := allSheets.Values[i][4].(string)
 		p3, _ := allSheets.Values[i][5].(string)
 		res := studentStatus(absence, p1, p2, p3)
-		arr := []string{res, finalExame(res, p1, p2, p3)}
+		arr := []interface{}{res, finalExame(res, p1, p2, p3)}
 		result = append(result, arr)
 	}
 
-	fmt.Println(result)
-	res := studentStatus("50", "66", "88", "80")
-	fmt.Println(res)
+	range2 := "G4:H27"
+
+	row := &sheets.ValueRange{
+		Values: result,
+	}
+
+	_, err = srv.Spreadsheets.Values.Update(spreadsheetId, range2, row).ValueInputOption("USER_ENTERED").Context(ctx).Do()
+	if err != nil {
+		log.Fatal(err)
+	}
 }
 
 func studentStatus(absence, p1, p2, p3 string) string {
