@@ -3,8 +3,8 @@ package main
 import (
 	"context"
 	"encoding/base64"
-	"io/ioutil"
 	"log"
+	"os"
 	"strconv"
 
 	"golang.org/x/oauth2/google"
@@ -16,7 +16,7 @@ func main() {
 	// create api context
 	ctx := context.Background()
 
-	jsonData, err := ioutil.ReadFile("google.json")
+	jsonData, err := os.ReadFile("google.json")
 	if err != nil {
 		log.Fatalf("Error reading JSON file: %v", err)
 	}
