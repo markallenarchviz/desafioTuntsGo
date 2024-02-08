@@ -47,8 +47,7 @@ Após o docker terminar de buildar a imagem da aplicação use o comando
 ```bash
   docker run desafio-tunts
 ```
-Isso irá iniciar o contêiner e executar a aplicação, modificando a planilha do Google Sheets
-Sempre que o comando de iniciar contêiner for executado, a aplicação irá calcular as notas na planilha
+Isso irá iniciar o contêiner e executar a aplicação, modificando a planilha do Google Sheets, sempre que o comando de iniciar contêiner for executado, a aplicação irá calcular as notas na planilha
 
 Caso queira rodar a aplicação localmente, tenha instalado o Go na versão 1.21.6 e use o seguinte comando(certifique-se de estar dentro da pasta principal do projeto):
 ```bash
